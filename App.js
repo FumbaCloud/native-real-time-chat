@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import React, {useState} from 'react';
+import {StatusBar} from 'expo-status-bar';
+import {NavigationContainer} from "@react-navigation/native";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Main screen</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import AppContext from "./context";
+import {auth} from './configs/firebase';
+
+import AuthNavigator from "./navigations/AuthNavigator";
+import AppNavigator from "./navigations/AppNavigator";
+
+const App = () => {
+    const [user, setUser] = useState(null);
+
+    return (
+        <AppContext.Provider value={{auth, user, setUser}}>
+            <NavigationContainer>
+                <StatusBar style={"light"}/>
+                {user ? <AppNavigator/> : <AuthNavigator/>}
+            </NavigationContainer>
+        </AppContext.Provider>
+    );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
